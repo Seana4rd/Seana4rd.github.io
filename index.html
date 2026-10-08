@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siyu Tao | AI for Biomedicine</title>
+<meta name="description" content="Siyu Tao is a Ph.D. student at ShanghaiTech University researching representation learning and active learning for biomedical discovery.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/favicon-cat.ico?v=2" type="image/x-icon" sizes="16x16 32x32 48x48">
+<link rel="icon" href="assets/favicon-cat.png?v=2" type="image/png" sizes="128x128">
+<link rel="alternate" hreflang="en" href="index.html">
+<link rel="alternate" hreflang="zh-CN" href="zh.html">
+
+
+<meta name="generator" content="ARIS Homepage Generator (theory-minimal, v1)">
+
+
+
+<script>
+(() => {
+  "use strict";
+
+  const storageKey = "siyu-homepage-theme";
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const isTheme = (value) => value === "light" || value === "dark";
+
+  let explicitTheme = null;
+
+  try {
+    const savedTheme = window.localStorage.getItem(storageKey);
+    explicitTheme = isTheme(savedTheme) ? savedTheme : null;
+  } catch {
+    // Storage may be unavailable; the switch still works for this page view.
+  }
+
+  const systemTheme = () => (prefersDark?.matches ? "dark" : "light");
+
+  const updateButtons = (theme) => {
+    document.querySelectorAll(".theme-switch").forEach((button) => {
+      const label = theme === "dark" ? button.dataset.lightLabel : button.dataset.darkLabel;
+      button.setAttribute("aria-label", label);
+      button.title = label;
+    });
+  };
+
+  const applyTheme = (theme) => {
+    document.documentElement.dataset.theme = theme;
+    updateButtons(theme);
+  };
+
+  applyTheme(explicitTheme ?? systemTheme());
+
+  const setupControls = () => {
+    document.querySelectorAll(".theme-switch[hidden]").forEach((control) => {
+      control.removeAttribute("hidden");
+    });
+
+    document.querySelectorAll(".theme-switch").forEach((button) => {
+      button.addEventListener("click", () => {
+        const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+        explicitTheme = theme;
+        applyTheme(theme);
+
+        try {
+          window.localStorage.setItem(storageKey, theme);
+        } catch {
+          // Keep the in-page choice even when persistence is unavailable.
+        }
+      });
+    });
+
+    updateButtons(document.documentElement.dataset.theme);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupControls, { once: true });
+  } else {
+    setupControls();
+  }
+
+  const handleSystemChange = () => {
+    if (explicitTheme === null) applyTheme(systemTheme());
+  };
+
+  if (prefersDark?.addEventListener) {
+    prefersDark.addEventListener("change", handleSystemChange);
+  } else {
+    prefersDark?.addListener?.(handleSystemChange);
+  }
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== storageKey) return;
+
+    explicitTheme = isTheme(event.newValue) ? event.newValue : null;
+    applyTheme(explicitTheme ?? systemTheme());
+  });
+})();
+
+</script>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #fafafa;
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --ink-muted: #6b6b6b;
+  --rule: #e5e5e5;
+  --accent: #28564a;
+  --max-width: 980px;
+  --body-size: 18px;
+  --line-height: 1.7;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+               Helvetica, Arial, sans-serif;
+  font-size: var(--body-size);
+  line-height: var(--line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 60px 28px 80px;
+}
+
+/* --- header / masthead --- */
+.masthead {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin-bottom: 36px;
+}
+.masthead .photo {
+  width: 240px;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--bg-soft);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.08);
+}
+.masthead .identity h1 {
+  margin: 0 0 6px;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.masthead .identity .name-native {
+  font-size: 22px;
+  color: var(--ink-soft);
+  font-weight: 400;
+  margin-left: 10px;
+}
+.masthead .identity .title-affil {
+  color: var(--ink-soft);
+  font-size: 18px;
+  margin: 6px 0 14px;
+  line-height: 1.5;
+}
+.masthead .identity .email {
+  color: var(--ink-muted);
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+.masthead .identity .email a { color: var(--ink-muted); }
+.social-strip {
+  font-size: 16px;
+  color: var(--ink-muted);
+}
+.social-strip a {
+  color: var(--ink-soft);
+  margin-right: 14px;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--ink-muted);
+}
+.social-strip a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+@media (max-width: 600px) {
+  .masthead { flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+  .masthead .photo { width: 160px; height: auto; }
+  .social-strip a { margin: 0 7px; }
+}
+
+/* --- sections --- */
+section {
+  margin: 48px 0;
+}
+section h2 {
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin: 0 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+section p { margin: 0 0 12px; }
+
+/* --- bio --- */
+.bio p { font-size: 17px; color: var(--ink); }
+.bio a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+.bio a:hover { border-bottom-color: var(--accent); }
+
+/* --- research --- */
+.research ul { padding-left: 22px; margin: 0; }
+.research li { margin: 6px 0; color: var(--ink-soft); }
+.research li b { color: var(--ink); }
+
+/* --- education --- */
+.education .edu-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 8px 0;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.education .edu-item .degree { color: var(--ink); }
+.education .edu-item .dates { color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* --- featured projects: restrained academic treatment, NOT marketing card.
+   Placed AFTER publications (like a "Software" section in a faculty homepage). --- */
+.featured-project {
+  margin: 36px 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+.featured-project + .featured-project { margin-top: 18px; }
+/* Float-right image: text wraps around hero SVG; once image ends, text fills full width.
+   (User-requested: 2-col only until image bottom, then 1-col continues.) */
+.featured-project .fp-logo-float {
+  float: right;
+  width: 48%;
+  max-width: 480px;
+  height: auto;
+  margin: 0 0 18px 28px;
+  display: block;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: white;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.featured-project::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* Open problems sub-section inside the ARIS featured card */
+.featured-project .fp-op-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+.featured-project .fp-open-problems {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.featured-project .fp-open-problems li { padding: 4px 0; }
+
+/* Mobile: image no longer floats — stacks above text full-width */
+@media (max-width: 800px) {
+  .featured-project .fp-logo-float {
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 18px 0;
+  }
+}
+.featured-project .fp-name {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  text-transform: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+}
+.featured-project .fp-tagline {
+  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 10px 0 6px;
+}
+.featured-project .fp-subtitle {
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-style: italic;
+  margin: 0;
+}
+.featured-project .fp-stats {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.85;
+}
+.featured-project .fp-stats li {
+  display: inline;
+}
+.featured-project .fp-stats li::after {
+  content: " · ";
+  color: var(--ink-muted);
+  margin: 0 2px;
+}
+.featured-project .fp-stats li:last-child::after { content: ""; }
+.featured-project .fp-stats .stat-label {
+  color: var(--ink-muted);
+}
+.featured-project .fp-stats .stat-label::after { content: " "; }
+.featured-project .fp-stats .stat-value {
+  color: var(--ink);
+  font-weight: 500;
+}
+.featured-project .fp-stats .stat-value a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--ink-muted); }
+.featured-project .fp-stats .stat-value a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.featured-project .fp-links {
+  font-size: 16px;
+  margin: 12px 0;
+}
+.featured-project .fp-links a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.featured-project .fp-links a:hover { text-decoration: underline; }
+.featured-project .fp-elevator {
+  font-size: 16px;
+  color: var(--ink-soft);
+  margin: 14px 0;
+  line-height: 1.65;
+}
+.featured-project .fp-subprojects-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+.featured-project .fp-subprojects {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+}
+.featured-project .fp-subprojects li {
+  padding: 2px 0;
+  color: var(--ink-soft);
+}
+.featured-project .fp-subprojects li a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.featured-project .fp-subprojects li a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* (Mobile rules for featured-project are defined above with fp-grid) */
+
+/* --- publications --- */
+.pubs .pub-preamble {
+  font-size: 14px;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--rule);
+}
+.pubs h3.pub-group {
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin: 28px 0 10px;
+  padding: 0;
+  border: none;
+}
+.pubs h3.pub-group:first-of-type { margin-top: 8px; }
+.pubs .pub-item {
+  padding: 16px 12px 16px 14px;
+  background: var(--bg-soft);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 3px 3px 0;
+  margin-bottom: 14px;
+}
+.pubs .pub-item:last-child { margin-bottom: 0; }
+.pubs .pub-item-with-thumb {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  grid-template-areas:
+    "thumb content"
+    "desc desc";
+  gap: 14px 20px;
+  align-items: start;
+}
+.pubs .pub-item-with-thumb .pub-thumb-wrap { grid-area: thumb; }
+.pubs .pub-item-with-thumb .pub-content { grid-area: content; }
+.pubs .pub-item-with-thumb > .pub-description { grid-area: desc; margin-top: 0; }
+.pubs .pub-thumb-wrap {
+  display: block;
+  overflow: hidden;
+  max-height: 150px;
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+}
+.pubs .pub-thumb {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+  display: block;
+}
+.pubs .pub-content { min-width: 0; }
+.pubs h3.pub-group { margin: 28px 0 10px; }
+@media (max-width: 600px) {
+  .pubs .pub-item-with-thumb { grid-template-columns: 1fr; gap: 10px; }
+  .pubs .pub-thumb { max-height: 180px; max-width: 280px; margin: 0 auto; }
+}
+.pubs .pub-item:last-child { border-bottom: none; }
+.pubs .pub-title {
+  color: var(--ink);
+  font-weight: 600;
+  margin: 0 0 4px;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.pubs .pub-authors {
+  color: var(--ink-soft);
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+.pubs .pub-authors .you { font-weight: 600; color: var(--ink); }
+.pubs .pub-venue {
+  color: var(--ink-muted);
+  font-size: 15px;
+  font-style: italic;
+  margin: 0 0 6px;
+}
+.pubs .pub-links {
+  font-size: 15px;
+  margin-top: 4px;
+}
+.pubs .pub-links a {
+  color: var(--accent);
+  text-decoration: none;
+  margin-right: 10px;
+}
+.pubs .pub-links a:hover { text-decoration: underline; }
+.pubs .pub-badge {
+  display: inline-block;
+  font-size: 13px;
+  padding: 2px 8px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+.pubs .pub-spotlight { border-left-width: 4px; }
+.pubs .pub-description {
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-top: 10px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  background: rgba(26, 74, 140, 0.04);
+  border-left: 2px solid var(--rule);
+  border-radius: 0 3px 3px 0;
+}
+.pubs .pub-description strong { color: var(--ink); }
+.pubs .scholar-deflect {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--ink-muted);
+  text-align: center;
+}
+
+/* --- news --- */
+.news .news-item {
+  display: flex;
+  gap: 14px;
+  padding: 8px 0;
+  font-size: 16px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.news .news-item .date {
+  color: var(--ink-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  min-width: 76px;
+}
+
+/* --- awards --- */
+.awards .award-item {
+  padding: 7px 0;
+  font-size: 16px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.awards .award-item .award-title { color: var(--ink); }
+.awards .award-item .award-meta { color: var(--ink-muted); font-size: 15px; }
+.awards .ps-preamble {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+
+/* --- footer --- */
+footer.aris-footer {
+  margin-top: 80px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  color: var(--ink-muted);
+  text-align: center;
+  line-height: 1.65;
+}
+footer.aris-footer .aris-mark {
+  display: inline-block;
+  font-size: 11px;
+  color: #a0a0a0;
+  margin-top: 6px;
+}
+footer.aris-footer a { color: var(--ink-muted); }
+footer.aris-footer a:hover { color: var(--accent); }
+
+/* --- print --- */
+@media print {
+  .page { padding: 20px; max-width: none; }
+  footer.aris-footer .aris-mark { border: none; }
+  section { page-break-inside: avoid; }
+}
+/* Local adjustments to the ARIS theory-minimal template. */
+:root {
+  color-scheme: light;
+  --body-size: 17px; --max-width: 1050px;
+  --bg: #ffffff; --bg-soft: #f4f8f5; --surface: #ffffff;
+  --ink: #222222; --ink-soft: #39433d; --ink-muted: #616161;
+  --accent: #28564a; --on-accent: #ffffff; --rule: #e2e2e2;
+  --publication-accent: #9a6a2f;
+  --name-underline: #ddb64b;
+  --paper-link: #3568a0;
+  --panel-border: #c3d9cd; --highlight: #edf5f0; --highlight-hover: #e1eee5;
+  --role-color: #80552f; --control-bg: #fafafa; --control-hover: #f0f0f0;
+  --control-border: #e2e2e2; --control-ink: #616161; --name-color: #222222;
+  --status: #b34342; --shadow: rgb(40 86 74 / 10%);
+  --tooltip-bg: #28564a; --tooltip-ink: #ffffff; --backdrop: rgb(12 28 20 / 65%);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111a16; --bg-soft: #17221c; --surface: #1a2820;
+  --ink: #e7eee9; --ink-soft: #c9d7ce; --ink-muted: #a5b8ac;
+  --accent: #9ccdbb; --on-accent: #13251e; --rule: #424242;
+  --publication-accent: #e4b976;
+  --name-underline: #eac761;
+  --paper-link: #94bfee;
+  --panel-border: #456552; --highlight: #20372a; --highlight-hover: #2b4636;
+  --role-color: #d5b17d; --control-bg: #232323; --control-hover: #303030;
+  --control-border: #424242; --control-ink: #c8c8c8; --name-color: #eeeeee;
+  --status: #f0a29b; --shadow: rgb(0 0 0 / 25%);
+  --tooltip-bg: #9ccdbb; --tooltip-ink: #13251e; --backdrop: rgb(3 10 6 / 78%);
+}
+html { scroll-padding-top: 24px; }
+.page { padding-top: 28px; }
+a { color: var(--accent); }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 2px; }
+.skip-link { position: absolute; left: 12px; top: -100px; background: var(--surface); padding: 8px 14px; z-index: 2; }
+.skip-link:focus { top: 8px; }
+.topbar { display: flex; justify-content: flex-end; align-items: center; gap: 24px; margin-bottom: 44px; font-size: 14px; }
+.section-nav { position: relative; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; min-width: 0; max-width: 100%; isolation: isolate; }
+.section-nav a { position: relative; z-index: 1; color: var(--ink-muted); text-decoration: none; padding: 0 10px; height: 36px; display: flex; align-items: center; white-space: nowrap; border-radius: 7px; }
+.section-nav a:hover, .section-nav a[aria-current] { color: var(--accent); }
+.section-nav a:hover { background: var(--highlight); }
+.section-nav.nav-ready a:hover { background: transparent; }
+.nav-highlight { position: absolute; top: 0; left: 0; height: var(--nav-height, 36px); width: var(--nav-width, 0px); transform: translate(var(--nav-x, 0px), var(--nav-y, 0px)); background: var(--highlight); border-radius: 7px; pointer-events: none; transition: transform 220ms ease, width 220ms ease; }
+.display-controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.language-switch { position: relative; white-space: nowrap; }
+.language-switch summary, .theme-switch { display: flex; align-items: center; justify-content: center; gap: 4px; height: 36px; padding: 0 8px; border: 1px solid var(--control-border); border-radius: 7px; background: var(--control-bg); color: var(--control-ink); cursor: pointer; font: inherit; font-size: 12px; list-style: none; }
+.language-switch summary::-webkit-details-marker { display: none; }
+.language-switch summary:hover, .language-switch[open] summary, .theme-switch:hover { background: var(--control-hover); color: var(--name-color); }
+.language-switch summary:focus-visible, .theme-switch:focus-visible { outline-color: var(--control-ink); outline-offset: 3px; border-radius: 7px; }
+.language-switch summary .theme-icon { width: 14px; height: 14px; }
+.language-chevron { font-size: 15px; transition: transform 160ms ease; }
+.language-switch[open] .language-chevron { transform: rotate(180deg); }
+.language-menu { position: absolute; right: 0; top: calc(100% + 8px); min-width: 140px; padding: 5px; border: 1px solid var(--control-border); border-radius: 8px; background: var(--control-bg); box-shadow: 0 8px 24px var(--shadow); z-index: 5; }
+.language-menu a { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; color: var(--control-ink); text-decoration: none; border-radius: 5px; }
+.language-menu a:hover, .language-menu a[aria-current] { color: var(--name-color); background: var(--control-hover); }
+.language-menu a:focus-visible { outline-color: var(--control-ink); outline-offset: 0; }
+.language-menu a[aria-current]::after { content: "✓"; margin-left: 16px; }
+.theme-switch { width: 36px; padding: 0; }
+.theme-switch[hidden], .theme-sun { display: none; }
+.theme-moon, html[data-theme="dark"] .theme-sun { display: flex; }
+html[data-theme="dark"] .theme-moon { display: none; }
+.theme-icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.masthead { align-items: center; gap: 36px; margin-bottom: 36px; }
+.masthead .photo { width: 175px; height: auto; box-shadow: none; object-fit: contain; }
+.masthead .identity { min-width: 0; }
+.masthead .identity h1 { font-size: 36px; }
+.masthead .identity .title-affil { font-size: 17px; margin-bottom: 15px; }
+.masthead .identity .email { font-size: 15px; overflow-wrap: anywhere; }
+.social-strip { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.social-strip a { display: inline-flex; align-items: center; gap: 7px; margin: 4px 0 0; }
+.social-icon { width: 18px; height: 18px; flex: 0 0 18px; }
+.intro-grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 46px; align-items: start; margin-bottom: 44px; }
+.profile-card { text-align: center; padding-top: 4px; min-width: 0; }
+.profile-card .photo { display: block; width: 200px; max-width: 100%; height: auto; margin: 0 auto 22px; border-radius: 4px; }
+.profile-card h1 { margin: 0 0 10px; font-size: 28px; font-weight: 600; line-height: 1.35; letter-spacing: -.02em; color: var(--name-color); }
+.profile-role, .profile-school { margin: 0; font-size: 16px; line-height: 1.8; color: var(--ink-soft); }
+.profile-role { color: var(--role-color); font-weight: 600; line-height: 1.5; margin-bottom: 6px; }
+.profile-school { font-size: 15px; line-height: 1.6; color: var(--ink-muted); }
+.contact-row { position: relative; display: flex; justify-content: center; gap: 7px; margin: 20px auto 0; width: max-content; max-width: 100%; }
+.contact-icon { position: relative; display: inline-flex; width: 38px; height: 40px; align-items: center; justify-content: center; color: var(--control-ink); border-radius: 5px; text-decoration: none; cursor: pointer; list-style: none; }
+.contact-icon::-webkit-details-marker { display: none; }
+.contact-icon:hover, .contact-icon:focus-visible, .contact-detail[open] > summary { background: var(--highlight); color: var(--accent); }
+.contact-icon .social-icon { width: 20px; height: 20px; flex-basis: 20px; }
+.icon-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 4px 8px; background: var(--tooltip-bg); color: var(--tooltip-ink); border-radius: 4px; font-size: 12px; line-height: 1.5; white-space: nowrap; pointer-events: none; opacity: 0; visibility: hidden; z-index: 3; }
+.contact-icon:hover .icon-tooltip, .contact-icon:focus-visible .icon-tooltip { opacity: 1; visibility: visible; }
+.contact-detail[open] .icon-tooltip { opacity: 0; visibility: hidden; }
+.contact-panel { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 248px; max-width: calc(100vw - 50px); padding: 16px; border: 1px solid var(--panel-border); border-radius: 7px; background: var(--surface); box-shadow: 0 8px 28px var(--shadow); z-index: 4; text-align: center; }
+.contact-label { display: block; font-size: 12px; color: var(--ink-muted); margin-bottom: 5px; }
+.wechat-qr { display: block; width: 100%; height: auto; background: #fff; }
+.contact-value { display: block; font-size: 17px; color: var(--ink); user-select: text; overflow-wrap: anywhere; }
+.copy-contact { margin-top: 12px; padding: 5px 14px; border: 1px solid var(--panel-border); border-radius: 4px; color: var(--accent); background: var(--highlight); font: inherit; font-size: 13px; cursor: pointer; }
+.copy-contact:hover { background: var(--highlight-hover); }
+.copy-status { margin: 6px 0 0; font-size: 12px; color: var(--ink-muted); }
+.copy-status:empty { display: none; }
+.intro-grid > .bio { margin: 0; min-width: 0; }
+section { margin: 38px 0; }
+section h2 { font-size: 26px; font-weight: 600; line-height: 1.4; letter-spacing: .01em; text-transform: none; margin-bottom: 18px; color: var(--accent); }
+.bio p { margin: 0 0 18px; font-size: 16px; line-height: 1.8; }
+.bio p:last-child { margin-bottom: 0; }
+.bio strong { font-weight: 600; }
+.bio p:first-of-type > strong:first-of-type { text-decoration: underline; text-decoration-color: var(--name-underline); text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+.oral-presentation { color: var(--status); font-weight: 600; }
+.bio ul { margin: -4px 0 20px; padding-left: 24px; font-size: 16px; line-height: 1.8; }
+.bio li { margin: 7px 0; }
+.research li { font-size: 16px; margin: 9px 0; }
+.news-window { height: 360px; max-height: 60vh; overflow-y: auto; overflow-x: hidden; padding-right: 14px; overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-soft); }
+.news-window:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; border-radius: 2px; }
+.news-year { margin: 0 0 6px; font-size: 18px; line-height: 1.5; font-weight: 600; color: var(--accent); }
+.news-year-group + .news-year-group { margin-top: 18px; }
+.news-list { list-style: none; margin: 0; padding: 0; }
+.news .news-item { padding: 10px 0; font-size: 15px; line-height: 1.7; }
+.news .news-item + .news-item { border-top: 1px solid var(--rule); }
+.news .news-item .date { width: 40px; min-width: 40px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.news .news-item .content { min-width: 0; overflow-wrap: anywhere; }
+.news-scroll-hint { margin: 10px 0 0; font-size: 12px; color: var(--ink-muted); }
+.pubs .pub-preamble { font-size: 14px; color: var(--ink-muted); margin-bottom: 20px; }
+.pubs .pub-item { background: var(--bg); border: 1px solid transparent; border-bottom-color: var(--rule); border-radius: 7px; padding: 18px 14px; margin: 0 -14px 16px; transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease, border-color 160ms ease; }
+.pubs .pub-item:focus-within { background: var(--highlight); border-color: var(--panel-border); box-shadow: 0 5px 18px var(--shadow); }
+@media (hover: hover) and (pointer: fine) {
+  .pubs .pub-item:hover { background: var(--highlight); border-color: var(--panel-border); box-shadow: 0 5px 18px var(--shadow); transform: translateY(-2px); }
+}
+.pubs .pub-item-with-thumb { grid-template-columns: 210px minmax(0, 1fr); gap: 18px 25px; }
+.pubs .pub-thumb-wrap { max-height: none; min-height: 145px; display: flex; align-items: center; justify-content: center; border-color: var(--rule); background: #ffffff; padding: 7px; }
+.pubs .pub-thumb-wrap:hover { border-color: var(--ink-muted); }
+.pubs .pub-thumb-wrap { cursor: zoom-in; }
+.pubs .pub-thumb { height: 150px; max-height: none; object-fit: contain; }
+.pubs .pub-title { font-size: 17px; line-height: 1.5; color: var(--ink); transition: color .3s ease; }
+.pubs .pub-item:hover .pub-title, .pubs .pub-item:focus-within .pub-title { color: var(--accent); }
+.pubs .pub-authors .you { font-weight: 700; color: var(--publication-accent); }
+.pubs .pub-authors { font-size: 14px; line-height: 1.7; margin: 6px 0; }
+.pubs .pub-authors a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.pubs .pub-authors a:hover, .pubs .pub-authors a:focus-visible { color: var(--accent); }
+.pubs .pub-venue { font-size: 14px; font-style: normal; color: var(--ink); margin-bottom: 4px; }
+.pubs .pub-status { font-size: 13px; color: var(--status); margin: 3px 0 8px; }
+.pubs .pub-summary { font-size: 14px; color: var(--ink-muted); margin: 7px 0; line-height: 1.65; }
+.pubs .pub-links { font-size: 14px; margin-top: 7px; }
+.pubs .pub-links a { display: inline-block; padding: 3px 0; }
+.pubs .pub-links .paper-link { color: var(--paper-link); font-weight: 600; }
+.pubs .pub-links .code-link { color: var(--accent); font-weight: 600; }
+.pubs .pub-links .poster-link { color: var(--publication-accent); font-weight: 600; }
+.pubs .scholar-deflect { text-align: left; margin: 0 0 12px; }
+.education .edu-item { font-size: 15px; line-height: 1.7; }
+.education .edu-item .dates { font-size: 14px; }
+.education .degree a { text-decoration: underline; text-underline-offset: 3px; }
+.university-link { display: inline-flex; align-items: center; vertical-align: middle; white-space: nowrap; }
+.university-emblem { width: 20px; height: 20px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
+.conference-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.conference-heading h2 { margin: 0; }
+.conference-controls:not([hidden]) { display: flex; gap: 8px; flex-shrink: 0; }
+.conference-controls button { width: 40px; height: 40px; padding: 0; border: 1px solid var(--control-border); border-radius: 50%; color: var(--ink); background: var(--surface); font: inherit; font-size: 20px; cursor: pointer; }
+.conference-controls button:hover:not(:disabled) { color: var(--accent); background: var(--highlight); }
+.conference-controls button:disabled { opacity: .3; cursor: default; }
+.conference-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 4px; overscroll-behavior-x: contain; list-style: none; margin: 0; padding: 4px 4px 14px; scrollbar-width: thin; scrollbar-color: var(--control-border) transparent; }
+.conference-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.conference-card { flex: 0 0 32%; min-width: 0; scroll-snap-align: start; }
+.conference-card figure { margin: 0; }
+.conference-photo { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 7px; background: var(--control-bg); cursor: zoom-in; }
+.conference-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 200ms ease; }
+.conference-photo:hover img { transform: scale(1.025); }
+.conference-card figcaption { padding: 12px 0 0; }
+.conference-card .conference-meta { margin: 0 0 7px; font-size: 13px; line-height: 1.6; color: var(--ink-muted); }
+.conference-meta time { color: var(--accent); font-weight: 600; }
+.conference-card h3 { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.55; color: var(--ink); }
+.conference-hint { margin: 8px 0 0; font-size: 12px; color: var(--ink-muted); }
+@media (max-width: 760px) {
+  .conference-card { flex-basis: 46%; }
+}
+@media (max-width: 600px) {
+  .conference-card { flex-basis: 86%; }
+  .conference-track { gap: 16px; }
+  .conference-heading { flex-wrap: wrap; gap: 12px; }
+}
+.awards .award-item { font-size: 15px; line-height: 1.7; }
+.awards .award-item .award-meta { font-size: 14px; }
+footer.aris-footer { margin-top: 48px; text-align: left; font-size: 12px; }
+html[lang="zh-CN"] section h2 { letter-spacing: .02em; }
+html.figure-open { overflow: hidden; }
+#figure-dialog { width: min(1120px, calc(100vw - 40px)); max-width: none; max-height: calc(100dvh - 40px); padding: 22px; border: 1px solid var(--panel-border); border-radius: 10px; background: var(--surface); color: var(--ink); box-shadow: 0 20px 80px var(--shadow); }
+#figure-dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(3px); }
+.figure-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+.figure-toolbar h2 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.5; }
+.figure-close { flex-shrink: 0; padding: 7px 11px; border: 1px solid var(--panel-border); border-radius: 4px; background: var(--highlight); color: var(--accent); font: inherit; font-size: 14px; cursor: pointer; }
+.figure-close:hover { background: var(--highlight-hover); }
+.figure-content { display: flex; justify-content: center; }
+.figure-full { display: block; max-width: 100%; max-height: calc(100dvh - 150px); width: auto; height: auto; object-fit: contain; }
+@media (prefers-reduced-motion: reduce) {
+  .conference-photo img { transition: none; transform: none; }
+  .nav-highlight, .language-chevron { transition: none; }
+  .pubs .pub-item { transition: none; transform: none !important; }
+}
+@media (max-width: 760px) {
+  .intro-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .profile-card { max-width: 320px; width: 100%; margin: 0 auto; }
+  .profile-card .photo { width: 170px; }
+  .topbar { align-items: flex-start; margin-bottom: 32px; gap: 12px; }
+  .section-nav { gap: 4px; }
+  .masthead { gap: 24px; }
+  .masthead .identity h1 { font-size: 30px; }
+  .masthead .identity .name-native { font-size: 20px; }
+  .pubs .pub-item-with-thumb { grid-template-columns: 175px minmax(0, 1fr); gap: 18px; }
+  .education .edu-item { flex-direction: column; gap: 2px; }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 20px 40px; }
+  .topbar { flex-direction: column-reverse; align-items: flex-end; gap: 10px; }
+  .display-controls { align-self: flex-end; }
+  .section-nav { justify-content: flex-end; gap: 4px; font-size: 13px; }
+  .social-strip { justify-content: center; }
+  .intro-grid { margin-bottom: 30px; }
+  .profile-card .photo { width: 155px; }
+  .masthead { gap: 20px; margin-bottom: 30px; }
+  .masthead .photo { width: 140px; }
+  .masthead .identity h1 { font-size: 30px; }
+  .masthead .identity .name-native { font-size: 19px; }
+  .masthead .identity .title-affil { font-size: 16px; }
+  section { margin: 30px 0; }
+  .pubs .pub-item-with-thumb { grid-template-columns: minmax(0, 1fr); grid-template-areas: "thumb" "content" "desc"; gap: 15px; }
+  .pubs .pub-thumb-wrap { width: 100%; }
+  .pubs .pub-thumb { max-width: 100%; width: 100%; height: 190px; }
+  .pubs .pub-title { font-size: 16px; }
+  .pubs .pub-authors { font-size: 13px; }
+  .news .news-item { gap: 12px; }
+  .news-window { height: 340px; padding-right: 10px; }
+  .education .edu-item .dates { white-space: normal; }
+  #figure-dialog { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 14px; }
+  .figure-toolbar { gap: 12px; }
+  .figure-toolbar h2 { font-size: 14px; }
+  .figure-full { max-height: calc(100dvh - 160px); }
+}
+@media print {
+  :root, html[data-theme="dark"] { color-scheme: light; --bg: #fff; --surface: #fff; --ink: #222; --ink-soft: #39433d; --ink-muted: #616161; --accent: #28564a; --rule: #9ccdbb; --status: #b34342; --role-color: #80552f; --name-color: #222222; }
+  .topbar, .skip-link, #figure-dialog { display: none; }
+  .page { padding: 0; }
+  .pubs .pub-item { break-inside: avoid; box-shadow: none; transform: none; background: white; }
+  .pubs { page-break-inside: auto; }
+  .intro-grid { grid-template-columns: 200px minmax(0, 1fr); gap: 28px; }
+  .contact-panel { position: static; transform: none; box-shadow: none; }
+  .news-window { height: auto; max-height: none; overflow: visible; padding-right: 0; }
+  .news-scroll-hint { display: none; }
+}
+
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<main class="page" id="content">
+
+<div class="topbar"><nav class="section-nav" aria-label="Main navigation"><a href="#about">Bio</a><a href="#news">News</a><a href="#publications">Publications</a><a href="#conferences">Conferences</a><a href="#education">Education</a><a href="#awards">Honors</a><span class="nav-highlight" aria-hidden="true"></span></nav><div class="display-controls" role="group" aria-label="Display preferences"><details class="language-switch"><summary aria-label="Language: English"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h12M9 3v2m-4 3c1 4 4 7 8 9M13 5c-1 6-5 10-10 12m11 3 4-10 4 10m-6-4h4"/></svg><span>English</span><span class="language-chevron" aria-hidden="true">⌄</span></summary><nav class="language-menu" aria-label="Language"><a href="index.html" lang="en" hreflang="en" aria-current="page">English</a><a href="zh.html" lang="zh" hreflang="zh">中文</a></nav></details><button class="theme-switch" type="button" aria-label="Night mode" data-light-label="Day mode" data-dark-label="Night mode" title="Night mode" hidden><span class="theme-sun"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></span><span class="theme-moon"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A8.7 8.7 0 0 1 10 3.5 8.8 8.8 0 1 0 20.5 14Z"/></svg></span></button></div></div>
+  <div class="intro-grid"><header class="profile-card"><img class="photo" src="assets/portrait.jpg" alt="Portrait of Siyu Tao" width="420" height="560" fetchpriority="high"><h1 lang="en">Siyu Tao</h1><p class="profile-role">Ph.D. Student</p><p class="profile-school">ShanghaiTech University</p><div class="contact-row" role="group" aria-label="Contact and profiles"><a class="contact-icon" href="mailto:taosy2022@shanghaitech.edu.cn" aria-label="Email"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span class="icon-tooltip" aria-hidden="true">Email</span></a><details class="contact-detail" data-contact="wechat"><summary class="contact-icon" aria-label="WeChat"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 9c0-3-2.8-5-6-5S2 6.4 2 9.4c0 1.5.8 3 2.3 4l-.7 2.3 2.8-1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M22 14c0-3-2.8-5.3-6.3-5.3S9.4 11 9.4 14s2.8 5.3 6.3 5.3c.7 0 1.4-.1 2.1-.3l2.7 1-.6-2.2A5 5 0 0 0 22 14Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><g fill="currentColor"><circle cx="6" cy="8" r="1"/><circle cx="10.5" cy="8" r="1"/><circle cx="13.5" cy="13.5" r="1"/><circle cx="18" cy="13.5" r="1"/></g></svg><span class="icon-tooltip" aria-hidden="true">WeChat</span></summary><div class="contact-panel"><span class="contact-label">Scan to add me on WeChat</span><img class="wechat-qr" src="assets/wechat.jpg" alt="Scan to add me on WeChat" width="946" height="946" loading="lazy"></div></details><a class="contact-icon" href="https://scholar.google.com/citations?user=IjcMN8oAAAAJ" aria-label="Google Scholar" rel="noopener"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9 12 4l10 5-10 5L2 9Z" fill="currentColor"/><path d="M6 12v5c3.6 3 8.4 3 12 0v-5M22 9v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="icon-tooltip" aria-hidden="true">Google Scholar</span></a><a class="contact-icon" href="https://github.com/Seana4rd" aria-label="GitHub" rel="noopener"><svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.08c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.64-1.25-1.64-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.39-1.22.71-1.5-2.5-.28-5.12-1.25-5.12-5.57 0-1.23.44-2.24 1.16-3.03-.12-.28-.51-1.43.11-2.98 0 0 .95-.3 3.08 1.15a10.72 10.72 0 0 1 5.6 0c2.14-1.45 3.08-1.15 3.08-1.15.62 1.55.23 2.7.11 2.98.72.79 1.16 1.8 1.16 3.03 0 4.33-2.63 5.28-5.13 5.56.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.2 11.2 0 0 0 12 .8Z"/></svg><span class="icon-tooltip" aria-hidden="true">GitHub</span></a></div></header><section class="bio" id="about"><h2>Bio</h2>
+<p>I am <strong>Siyu Tao</strong> (陶思宇 in Chinese), a Ph.D. student in Computer Science and Technology at <strong><a class="university-link" href="https://www.shanghaitech.edu.cn/" rel="noopener"><img class="university-emblem" src="assets/shanghaitech-emblem.png" alt="ShanghaiTech University logo" width="20" height="20" loading="lazy">ShanghaiTech University</a></strong>, advised by <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Prof. Jie Zheng</a>.</p>
+<p>Before that, I received my B.Sc. in Data Science and Big Data Technology from <strong><a class="university-link" href="https://zs.xtu.edu.cn/" rel="noopener"><img class="university-emblem" src="assets/xiangtan-emblem.png" alt="Xiangtan University logo" width="20" height="20" loading="lazy">Xiangtan University</a></strong> (Hunan) in 2022.</p>
+<p>My research interests include:</p>
+<ul><li><strong>Multimodal and knowledge-guided</strong> biomedical target prediction.</li><li><strong>Active learning</strong> for experimental design under budget constraints.</li><li><strong>LLM agents</strong> for healthcare and scientific hypothesis generation.</li></ul>
+<p>If you are interested in my research, would like to explore a collaboration, or simply want to have a chat, please feel free to reach out via email or WeChat.</p>
+</section></div>
+
+  <section class="news" id="news"><h2 id="news-heading">News</h2><div class="news-window" role="region" aria-labelledby="news-heading" aria-describedby="news-scroll-hint" tabindex="0"><div class="news-year-group"><h3 class="news-year">2026</h3><ul class="news-list"><li class="news-item"><time class="date" datetime="2026-07">Jul</time><span class="content">Presented <strong>SLAMR</strong> at ACM-BCB 2026 in Cosenza, Italy 🇮🇹. A wonderful trip! 😊</span></li><li class="news-item"><time class="date" datetime="2026-05">May</time><span class="content">Excited to share that <strong>two papers</strong> were accepted for <strong>oral presentations at ACM-BCB 2026</strong>! 🎉</span></li></ul></div><div class="news-year-group"><h3 class="news-year">2025</h3><ul class="news-list"><li class="news-item"><time class="date" datetime="2025-12">Dec</time><span class="content">Presented <strong>SLformer</strong> in Shenzhen. A great trip with delicious food! 😋</span></li><li class="news-item"><time class="date" datetime="2025-10">Oct</time><span class="content">Attended the <strong>National Conference on Bioinformatics and Systems Biology</strong>. Another wonderful trip! 😊</span></li><li class="news-item"><time class="date" datetime="2025-09">Sep</time><span class="content">Happy to share that <strong>LukePi</strong> was published in <strong>IEEE TCBB</strong>!</span></li><li class="news-item"><time class="date" datetime="2025-04">Apr</time><span class="content">Presented <strong>MiT4SL</strong> at the <strong>17th RECOMB-CCB</strong> in Seoul, South Korea 🇰🇷. An unforgettable experience! 😄</span></li><li class="news-item"><time class="date" datetime="2025-04">Apr</time><span class="content">Honored to receive the <strong>Outstanding Presentation Award</strong> at the First-Author Forum of the <strong>2nd National Conference on Genome Informatics</strong>! 🎉</span></li><li class="news-item"><time class="date" datetime="2025-03">Mar</time><span class="content">One paper accepted to the <strong>17th RECOMB-CCB 2025</strong>! 🎉</span></li><li class="news-item"><time class="date" datetime="2025-03">Mar</time><span class="content">Presented <strong>MiT4SL</strong> in Shenzhen. A wonderful experience! 😄</span></li></ul></div></div><p class="news-scroll-hint" id="news-scroll-hint">Scroll for earlier updates ↓</p></section>
+
+  <section class="pubs" id="publications"><h2>Selected Publications</h2>
+<div class="scholar-deflect">* Equal contribution. &nbsp; View all → <a href="https://scholar.google.com/citations?user=IjcMN8oAAAAJ" rel="noopener">Google Scholar</a>.</div>
+<div class="pub-item pub-item-with-thumb"><a class="pub-thumb-wrap" href="assets/pertal.png" aria-label="View full-size figure: Overview of the PertAL active learning framework"><img class="pub-thumb" src="assets/pertal.png" alt="Overview of the PertAL active learning framework" loading="lazy" decoding="async"></a><div class="pub-content"><div class="pub-title">PertAL: An Efficient and Robust Active Learning Framework for Budget-Constrained Single-Cell Perturbation Screens</div><div class="pub-authors"><span class="you">Siyu Tao</span>, <a href="https://wushiqwq.tech/" rel="noopener">Yuanxian Li</a>, <a href="https://research.a-star.edu.sg/researcher/min-wu/" rel="noopener">Min Wu</a>, <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Jie Zheng</a></div><div class="pub-venue">Briefings in Bioinformatics · under review</div><p class="pub-status">Major revision submitted</p><div class="pub-links"><a class="code-link" href="https://github.com/JieZheng-ShanghaiTech/PertAL" rel="noopener">[Code]</a><a class="poster-link" href="assets/POSTER_PertAL_ECCB_2026.pdf" rel="noopener">[Poster]</a></div></div></div>
+<div class="pub-item pub-item-with-thumb"><a class="pub-thumb-wrap" href="assets/mit4sl.png" aria-label="View full-size figure: Overview of context-conditioned synthetic lethality modelling"><img class="pub-thumb" src="assets/mit4sl.png" alt="Overview of context-conditioned synthetic lethality modelling" loading="lazy" decoding="async"></a><div class="pub-content"><div class="pub-title">Modelling Synthetic Lethal Vulnerabilities in Cancer with Context-conditioned Representation Learning</div><div class="pub-authors"><span class="you">Siyu Tao</span>, Ruoyin Zhang, Yimiao Feng, Yang Yang, <a href="https://research.a-star.edu.sg/researcher/min-wu/" rel="noopener">Min Wu</a>, <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Jie Zheng</a></div><div class="pub-venue">17th RECOMB-CCB 2025 · <span class="oral-presentation">Oral presentation</span></div><p class="pub-status">Journal version submitted to Nature Communications</p><div class="pub-links"><a class="code-link" href="https://github.com/JieZheng-ShanghaiTech/MiT4SL" rel="noopener">[Code]</a><a class="poster-link" href="assets/POSTER_MiT4SL_Seoul_2025.pdf" rel="noopener">[Poster]</a></div></div></div>
+<div class="pub-item pub-item-with-thumb"><a class="pub-thumb-wrap" href="assets/slamr.png" aria-label="View full-size figure: Overview of the SLAMR multimodal framework"><img class="pub-thumb" src="assets/slamr.png" alt="Overview of the SLAMR multimodal framework" loading="lazy" decoding="async"></a><div class="pub-content"><div class="pub-title">SLAMR: LLM-Augmented Multimodal Learning for Cold-Start Synthetic Lethality Recommendation in Cancer Cell Lines</div><div class="pub-authors"><span class="you">Siyu Tao*</span>, Yingfan Rui*, <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Jie Zheng</a></div><div class="pub-venue">ACM-BCB 2026 · <span class="oral-presentation">Oral presentation</span></div><div class="pub-links"><a class="paper-link" href="https://doi.org/10.1145/3807503.3819499" rel="noopener">[Paper]</a><a class="code-link" href="https://github.com/Rrrrachellll/SLAMR" rel="noopener">[Code]</a></div></div></div>
+<div class="pub-item pub-item-with-thumb"><a class="pub-thumb-wrap" href="assets/lukepi.png" aria-label="View full-size figure: Overview of the LukePi knowledge graph embedding framework"><img class="pub-thumb" src="assets/lukepi.png" alt="Overview of the LukePi knowledge graph embedding framework" loading="lazy" decoding="async"></a><div class="pub-content"><div class="pub-title">Learning Universal Knowledge Graph Embedding for Predicting Biomedical Pairwise Interactions</div><div class="pub-authors"><span class="you">Siyu Tao</span>, Yang Yang, Xin Liu, Yimiao Feng, <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Jie Zheng</a></div><div class="pub-venue">IEEE Transactions on Computational Biology and Bioinformatics, 2025</div><div class="pub-links"><a class="paper-link" href="https://doi.org/10.1101/2025.02.10.637419" rel="noopener">[Paper]</a><a class="code-link" href="https://github.com/JieZheng-ShanghaiTech/LukePi" rel="noopener">[Code]</a></div></div></div>
+
+</section>
+
+  <section class="conferences" id="conferences"><div class="conference-heading"><h2 id="conference-heading">Conference Moments</h2><div class="conference-controls" hidden><button type="button" class="conference-prev" aria-label="Previous photo" aria-controls="conference-track" disabled>←</button><button type="button" class="conference-next" aria-label="Next photo" aria-controls="conference-track">→</button></div></div><ul class="conference-track" id="conference-track" tabindex="0" aria-labelledby="conference-heading" aria-describedby="conference-hint"><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-acm-bcb-2026.jpg" aria-label="View photo: ACM-BCB · Calabria, Italy · 2026"><img src="assets/conference-acm-bcb-2026.jpg" alt="ACM-BCB · Calabria, Italy · 2026" width="1600" height="1200" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2026">2026</time><span aria-hidden="true"> · </span>Calabria, Italy</p><h3>ACM-BCB</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-recomb-ccb-2025.jpg" aria-label="View photo: 17th RECOMB-CCB · Seoul, South Korea · 2025"><img src="assets/conference-recomb-ccb-2025.jpg" alt="17th RECOMB-CCB · Seoul, South Korea · 2025" width="1600" height="1200" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2025">2025</time><span aria-hidden="true"> · </span>Seoul, South Korea</p><h3>17th RECOMB-CCB</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-genome-informatics-2025.jpg" aria-label="View photo: 2nd National Conference on Genome Informatics · Shenzhen, China · 2025"><img src="assets/conference-genome-informatics-2025.jpg" alt="2nd National Conference on Genome Informatics · Shenzhen, China · 2025" width="1600" height="1066" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2025">2025</time><span aria-hidden="true"> · </span>Shenzhen, China</p><h3>2nd National Conference on Genome Informatics</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-bioinformatics-2025.jpg" aria-label="View photo: 14th National Conference on Bioinformatics and Systems Biology · Nanning, China · 2025"><img src="assets/conference-bioinformatics-2025.jpg" alt="14th National Conference on Bioinformatics and Systems Biology · Nanning, China · 2025" width="1600" height="1200" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2025">2025</time><span aria-hidden="true"> · </span>Nanning, China</p><h3>14th National Conference on Bioinformatics and Systems Biology</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-cancer-systems-2025.jpg" aria-label="View photo: 14th Symposium on Cancer Systems Biology · Shenzhen, China · 2025"><img src="assets/conference-cancer-systems-2025.jpg" alt="14th Symposium on Cancer Systems Biology · Shenzhen, China · 2025" width="1600" height="1200" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2025">2025</time><span aria-hidden="true"> · </span>Shenzhen, China</p><h3>14th Symposium on Cancer Systems Biology</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-pujiang-2024.jpg" aria-label="View photo: 23rd Pujiang Interdisciplinary Forum · Shanghai, China · 2024"><img src="assets/conference-pujiang-2024.jpg" alt="23rd Pujiang Interdisciplinary Forum · Shanghai, China · 2024" width="1600" height="1200" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2024">2024</time><span aria-hidden="true"> · </span>Shanghai, China</p><h3>23rd Pujiang Interdisciplinary Forum</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-bioinformatics-2024.jpg" aria-label="View photo: 13th National Conference on Bioinformatics and Systems Biology · Haikou, China · 2024"><img src="assets/conference-bioinformatics-2024.jpg" alt="13th National Conference on Bioinformatics and Systems Biology · Haikou, China · 2024" width="1600" height="900" loading="lazy" decoding="async" style="object-position: 50% 50%"></a><figcaption><p class="conference-meta"><time datetime="2024">2024</time><span aria-hidden="true"> · </span>Haikou, China</p><h3>13th National Conference on Bioinformatics and Systems Biology</h3></figcaption></figure></li><li class="conference-card"><figure><a class="conference-photo" href="assets/conference-bioinformatics-2023.jpg" aria-label="View photo: 12th National Conference on Bioinformatics and Systems Biology · Qingdao, China · 2023"><img src="assets/conference-bioinformatics-2023.jpg" alt="12th National Conference on Bioinformatics and Systems Biology · Qingdao, China · 2023" width="1200" height="1600" loading="lazy" decoding="async" style="object-position: 50% 70%"></a><figcaption><p class="conference-meta"><time datetime="2023">2023</time><span aria-hidden="true"> · </span>Qingdao, China</p><h3>12th National Conference on Bioinformatics and Systems Biology</h3></figcaption></figure></li></ul><p class="conference-hint" id="conference-hint">Scroll to explore</p></section>
+
+  <section class="education" id="education"><h2>Education</h2>
+<div class="edu-item"><span class="degree">Ph.D. in Computer Science and Technology · <a class="university-link" href="https://www.shanghaitech.edu.cn/" rel="noopener"><img class="university-emblem" src="assets/shanghaitech-emblem.png" alt="ShanghaiTech University logo" width="20" height="20" loading="lazy">ShanghaiTech University</a> · advised by <a href="https://sist.shanghaitech.edu.cn/zhengjie/main.htm" rel="noopener">Jie Zheng</a></span><span class="dates">2022-09 – 2027-06 (expected)</span></div>
+<div class="edu-item"><span class="degree">B.Sc. in Data Science and Big Data Technology · <a class="university-link" href="https://zs.xtu.edu.cn/" rel="noopener"><img class="university-emblem" src="assets/xiangtan-emblem.png" alt="Xiangtan University logo" width="20" height="20" loading="lazy">Xiangtan University</a></span><span class="dates">2018-09 – 2022-06</span></div>
+</section>
+
+  <section class="awards" id="awards"><h2>Honors & Awards</h2>
+<div class="award-item"><span class="award-title">Outstanding Presentation Award</span> <span class="award-meta">— First-Author Forum, 2nd National Conference on Genome Informatics, 2025</span></div>
+<div class="award-item"><span class="award-title">Merit Student</span> <span class="award-meta">— ShanghaiTech University, 2025</span></div>
+<div class="award-item"><span class="award-title">Outstanding Graduate of Hunan Province</span> <span class="award-meta">— 2022</span></div>
+</section>
+
+  <footer class="aris-footer">Last updated 2026-10-02<span class="footer-separator"> · </span>Based on <a href="https://github.com/wanshuiyin/ARIS-in-AI-Offer">ARIS-Homepage</a></footer>
+
+</main>
+<dialog id="figure-dialog" aria-labelledby="figure-title"><div class="figure-toolbar"><h2 id="figure-title">View full-size figure</h2><button type="button" class="figure-close" autofocus>Close<span aria-hidden="true"> ×</span></button></div><div class="figure-content"></div></dialog>
+<script>
+(function () {
+  "use strict";
+
+  function initFigureDialog() {
+    var dialog = document.getElementById("figure-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") {
+      return;
+    }
+
+    var content = dialog.querySelector(".figure-content");
+    var title = dialog.querySelector("#figure-title");
+    var closeButton = dialog.querySelector(".figure-close");
+    if (!content || !title || !closeButton) {
+      return;
+    }
+
+    var opener = null;
+    var imageLinkPattern = /^assets\/[^?#]+\.(?:png|jpe?g)(?:[?#].*)?$/i;
+    var links = document.querySelectorAll("a.pub-thumb-wrap[href], a.conference-photo[href]");
+
+    function isPlainPrimaryClick(event) {
+      return event.button === 0 &&
+        !event.altKey &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.shiftKey;
+    }
+
+    function openFigure(link) {
+      var sourceImage = link.querySelector("img");
+      var fullImage = document.createElement("img");
+      var alt = sourceImage ? sourceImage.alt : "";
+
+      fullImage.className = "figure-full";
+      fullImage.src = link.getAttribute("href");
+      fullImage.alt = alt;
+      content.replaceChildren(fullImage);
+      title.textContent = alt || "Figure";
+      opener = link;
+      document.documentElement.classList.add("figure-open");
+
+      try {
+        dialog.showModal();
+      } catch (error) {
+        document.documentElement.classList.remove("figure-open");
+        content.replaceChildren();
+        opener = null;
+        return false;
+      }
+
+      return true;
+    }
+
+    links.forEach(function (link) {
+      if (!imageLinkPattern.test(link.getAttribute("href") || "")) {
+        return;
+      }
+
+      link.addEventListener("click", function (event) {
+        if (!isPlainPrimaryClick(event)) {
+          return;
+        }
+
+        if (openFigure(link)) {
+          event.preventDefault();
+        }
+      });
+    });
+
+    closeButton.addEventListener("click", function () {
+      dialog.close();
+    });
+
+    dialog.addEventListener("click", function (event) {
+      if (event.target !== dialog) {
+        return;
+      }
+
+      var bounds = dialog.getBoundingClientRect();
+      var isOutside = event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom;
+
+      if (isOutside) {
+        dialog.close();
+      }
+    });
+
+    dialog.addEventListener("close", function () {
+      var linkToRestore = opener;
+      opener = null;
+      document.documentElement.classList.remove("figure-open");
+      content.replaceChildren();
+
+      if (linkToRestore && linkToRestore.isConnected) {
+        linkToRestore.focus();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFigureDialog, { once: true });
+  } else {
+    initFigureDialog();
+  }
+}());
+
+(function () {
+  "use strict";
+
+  function initContactControls() {
+    var details = Array.prototype.slice.call(
+      document.querySelectorAll(".contact-row details.contact-detail")
+    );
+
+    if (!details.length) {
+      return;
+    }
+
+    var activeDetail = null;
+    var copyAttempts = new WeakMap();
+
+    function statusFor(detail) {
+      return detail.querySelector(".copy-status");
+    }
+
+    function resetStatus(detail) {
+      var status = statusFor(detail);
+      if (status) {
+        status.textContent = "";
+      }
+      copyAttempts.set(detail, (copyAttempts.get(detail) || 0) + 1);
+    }
+
+    function closeDetail(detail) {
+      if (detail.open) {
+        detail.open = false;
+      }
+      resetStatus(detail);
+    }
+
+    function closeAll(except) {
+      details.forEach(function (detail) {
+        if (detail !== except) {
+          closeDetail(detail);
+        }
+      });
+    }
+
+    details.forEach(function (detail) {
+      var copyButton = detail.querySelector(".copy-contact");
+
+      if (copyButton) {
+        copyButton.hidden = false;
+
+        copyButton.addEventListener("click", function () {
+          var status = statusFor(detail);
+          var value = copyButton.getAttribute("data-copy") || "";
+          var successMessage = copyButton.getAttribute("data-copied") || "Copied";
+          var failureMessage = copyButton.getAttribute("data-failed") || "Select the value to copy";
+          var attempt = (copyAttempts.get(detail) || 0) + 1;
+
+          copyAttempts.set(detail, attempt);
+
+          function report(message) {
+            if (detail.open && copyAttempts.get(detail) === attempt && status) {
+              status.textContent = message;
+            }
+          }
+
+          if (!value || !navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+            report(failureMessage);
+            return;
+          }
+
+          try {
+            Promise.resolve(navigator.clipboard.writeText(value)).then(function () {
+              report(successMessage);
+            }, function () {
+              report(failureMessage);
+            });
+          } catch (error) {
+            report(failureMessage);
+          }
+        });
+      }
+
+      detail.addEventListener("toggle", function () {
+        if (detail.open) {
+          activeDetail = detail;
+          closeAll(detail);
+        } else {
+          resetStatus(detail);
+          if (activeDetail === detail) {
+            activeDetail = null;
+          }
+        }
+      });
+    });
+
+    document.addEventListener("click", function (event) {
+      if (event.target.closest && event.target.closest(".contact-row")) {
+        return;
+      }
+
+      closeAll();
+      activeDetail = null;
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      var focusedDetail = document.activeElement && document.activeElement.closest
+        ? document.activeElement.closest("details.contact-detail")
+        : null;
+      var detailToClose = focusedDetail && focusedDetail.open ? focusedDetail : activeDetail;
+
+      if (!detailToClose || !detailToClose.open) {
+        return;
+      }
+
+      var summary = detailToClose.querySelector("summary.contact-icon");
+      closeAll();
+      activeDetail = null;
+
+      if (summary) {
+        summary.focus();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContactControls, { once: true });
+  } else {
+    initContactControls();
+  }
+}());
+
+(() => {
+  "use strict";
+
+  const language = document.querySelector(".language-switch");
+  const summary = language.querySelector("summary");
+  document.addEventListener("click", (event) => {
+    if (!language.contains(event.target)) language.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && language.open) {
+      language.open = false;
+      summary.focus();
+    }
+  });
+
+  const nav = document.querySelector(".section-nav");
+  const links = [...nav.querySelectorAll("a")];
+  const sections = links.map((link) => document.querySelector(link.hash));
+  let active = links.find((link) => link.hash === location.hash) || links[0];
+  const move = (link) => {
+    nav.style.setProperty("--nav-x", `${link.offsetLeft}px`);
+    nav.style.setProperty("--nav-y", `${link.offsetTop}px`);
+    nav.style.setProperty("--nav-width", `${link.offsetWidth}px`);
+    nav.style.setProperty("--nav-height", `${link.offsetHeight}px`);
+  };
+  const select = (link) => {
+    active = link;
+    links.forEach((item) => {
+      if (item === active) item.setAttribute("aria-current", "location");
+      else item.removeAttribute("aria-current");
+    });
+    move(active);
+  };
+  const syncToScroll = () => {
+    const readingLine = Math.min(160, window.innerHeight * 0.25);
+    let index = 0;
+    sections.forEach((section, i) => {
+      if (section.getBoundingClientRect().top <= readingLine) index = i;
+    });
+    if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+      index = links.length - 1;
+    }
+    if (active !== links[index]) select(links[index]);
+  };
+  let scrollFrame = 0;
+  const scheduleSync = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      syncToScroll();
+    });
+  };
+  links.forEach((link) => {
+    link.addEventListener("pointerenter", () => move(link));
+    link.addEventListener("focus", () => move(link));
+    link.addEventListener("click", () => select(link));
+  });
+  nav.addEventListener("pointerleave", () => move(active));
+  nav.addEventListener("focusout", (event) => {
+    if (!nav.contains(event.relatedTarget)) move(active);
+  });
+  window.addEventListener("hashchange", () => select(links.find((link) => link.hash === location.hash) || links[0]));
+  window.addEventListener("scroll", scheduleSync, { passive: true });
+  window.addEventListener("resize", scheduleSync);
+  window.addEventListener("pageshow", scheduleSync);
+  new ResizeObserver(() => {
+    move(active);
+    scheduleSync();
+  }).observe(nav);
+  new ResizeObserver(scheduleSync).observe(document.querySelector(".page"));
+  select(active);
+  scheduleSync();
+  nav.classList.add("nav-ready");
+})();
+
+(function () {
+  "use strict";
+
+  var track = document.querySelector(".conference-track");
+  var controls = document.querySelector(".conference-controls");
+  if (!track || !controls) return;
+
+  var previous = controls.querySelector(".conference-prev");
+  var next = controls.querySelector(".conference-next");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function updateControls() {
+    previous.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+  }
+
+  function move(direction) {
+    var cards = track.querySelectorAll(".conference-card");
+    if (cards.length < 2) return;
+    var step = cards[1].offsetLeft - cards[0].offsetLeft;
+    track.scrollBy({ left: direction * step, behavior: reduceMotion.matches ? "instant" : "smooth" });
+  }
+
+  previous.addEventListener("click", function () { move(-1); });
+  next.addEventListener("click", function () { move(1); });
+  track.addEventListener("scroll", updateControls, { passive: true });
+  track.addEventListener("keydown", function (event) {
+    if (event.target !== track || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      move(event.key === "ArrowLeft" ? -1 : 1);
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      track.scrollTo({ left: event.key === "Home" ? 0 : track.scrollWidth,
+        behavior: reduceMotion.matches ? "instant" : "smooth" });
+    }
+  });
+  window.addEventListener("resize", updateControls);
+  controls.hidden = false;
+  updateControls();
+}());
+
+</script>
+</body>
+</html>
